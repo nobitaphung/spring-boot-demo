@@ -38,8 +38,8 @@ public class UserDetailsImpl implements UserDetails {
         return user.getUsername();
     }
 
-    public String getUseremail() {
-        return user.getUseremail();
+    public String getEmail() {
+        return user.getEmail();
     }
 
     @Override

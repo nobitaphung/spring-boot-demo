@@ -2,9 +2,12 @@ package com.example.demo.controller;
 
 import javax.validation.Valid;
 import com.example.demo.dao.UserRepository;
+import com.example.demo.model.User;
 import com.example.demo.model.UserDetailsImpl;
 import com.example.demo.payload.JwtResponse;
 import com.example.demo.payload.LoginRequest;
+import com.example.demo.payload.MessageResponse;
+import com.example.demo.payload.SignupRequest;
 import com.example.demo.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +54,33 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
-                userDetails.getUseremail(),
+                userDetails.getEmail(),
                 userDetails.getRole()));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
+        // Create new user's account
+        User user = new User(signUpRequest.getUsername(),
+                signUpRequest.getEmail(),
+                encoder.encode(signUpRequest.getPassword()));
+
+        user.setRole("USER");
+        user.setEnabled(true);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }

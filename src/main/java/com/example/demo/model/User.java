@@ -1,9 +1,16 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "user")
+@Table(	name = "user",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
 
     @Id
@@ -11,11 +18,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String user_email;
+    private String email;
     private String username;
     private String password;
     private String role;
     private boolean enabled;
+
+    public  User(){};
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     // getters and setters are not shown for brevity
     public Long getId() {
@@ -26,12 +40,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUseremail() {
-        return user_email;
+    public String getEmail() {
+        return email;
     }
 
     public void setUseremail(String user_email) {
-        this.user_email = user_email;
+        this.email = user_email;
     }
 
     public String getUsername() {

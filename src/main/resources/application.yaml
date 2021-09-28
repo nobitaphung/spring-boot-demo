@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/hhd-webpage
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 972871875289-iq458icd9hbpr16338o6cik7ajc48c2s.apps.googleusercontent.com
+            clientSecret: -L93mVfd6QRZT_MpIuhmqhpv
+            scope:
+              - email
+              - profile

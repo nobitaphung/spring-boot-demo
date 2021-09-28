@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MyController {
+public class TestController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<?> helloWorld(){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Hello World!!!");

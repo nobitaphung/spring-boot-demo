@@ -1,11 +1,14 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Entity
 @Table(	name = "users",
@@ -20,8 +23,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String username;
+
+    @JsonIgnore
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -29,10 +38,22 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
+  
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
 
+
+    @Column(nullable = false)
     private boolean enabled;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providedId;
+
     public  User(){};
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
@@ -87,4 +108,34 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProvidedId() {
+        return providedId;
+    }
+
+    public void setProvidedId(String providedId) {
+        this.providedId = providedId;
+    }
+
+
 }

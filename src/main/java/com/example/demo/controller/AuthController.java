@@ -6,7 +6,6 @@ import com.example.demo.model.ERole;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.model.Role;
-
 import com.example.demo.model.User;
 import com.example.demo.payload.JwtResponse;
 import com.example.demo.payload.LoginRequest;
@@ -44,7 +43,7 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -78,15 +77,15 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
         String strRoles = signUpRequest.getRole();
 
-        if (strRoles.equals("admin")){
-            Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
+        if(strRoles == null){
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
-        } 
+        } else if (strRoles.equals("admin")){
+            Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        }
 
         user.setRoles(roles);
         user.setEnabled(true);

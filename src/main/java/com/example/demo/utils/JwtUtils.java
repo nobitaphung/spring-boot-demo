@@ -2,11 +2,14 @@ package com.example.demo.utils;
 
 import com.example.demo.model.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtils {
@@ -18,11 +21,17 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        Map obj = new HashMap();
+        obj.put("user_id",userPrincipal.getId());
+        obj.put("user_name",userPrincipal.getUsername());
+        obj.put("user_email",userPrincipal.getEmail());
+        obj.put("role", userPrincipal.getRole());
+        obj.put("iat", (new Date().getTime()));
+        obj.put("exp", (new Date((new Date()).getTime() + jwtExpirationMs)).getTime());
+        String payload = JSONValue.toJSONString(obj);
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setPayload(payload)
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }

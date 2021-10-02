@@ -10,13 +10,42 @@ spring:
     show-sql: true
     generate-ddl: true
 
+  app:
+    auth:
+      tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+      tokenExpirationMsec: 864000000
+    oauth2:
+      # After successfully authenticating with the OAuth2 Provider,
+      # we'll be generating an auth token for the user and sending the token to the
+      # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
+      # We're not using cookies because they won't work well in mobile clients.
+      authorizedRedirectUris:
+        - http://localhost:3000/oauth2/redirect
+        - myandroidapp://oauth2/redirect
+        - myiosapp://oauth2/redirect
+
   security:
     oauth2:
       client:
         registration:
+          github:
+            clientId: d3e47fc2ddd966fa4352
+            clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+          facebook:
+            clientId: 121189305185277
+            clientSecret: 42ffe5aa7379e8326387e0fe16f34132
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}" # Note that facebook now mandates the use of https redirect URIs, so make sure your app supports https in production
+            scope:
+              - email
+              - public_profile
           google:
             clientId: 972871875289-iq458icd9hbpr16338o6cik7ajc48c2s.apps.googleusercontent.com
             clientSecret: -L93mVfd6QRZT_MpIuhmqhpv
             scope:
               - email
               - profile
+

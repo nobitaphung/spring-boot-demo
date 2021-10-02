@@ -5,6 +5,7 @@ CREATE TABLE `users`
             `email` VARCHAR(50) NULL,
             `password` VARCHAR(120) NOT NULL,
             `enabled` BIT NOT NULL,
+            `emailVerified` BIT NOT NULL,
             `role` VARCHAR(20) NULL DEFAULT NULL,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `uq_email` (`email` ASC),

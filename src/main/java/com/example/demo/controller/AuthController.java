@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import javax.validation.Valid;
-import com.example.demo.dao.UserRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.model.AuthProvider;
 import com.example.demo.model.User;
 import com.example.demo.model.UserDetailsImpl;
 import com.example.demo.payload.JwtResponse;
@@ -37,7 +38,7 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -78,6 +79,7 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()));
 
         user.setRole("USER");
+        user.setProvider(AuthProvider.local);
         user.setEnabled(true);
         userRepository.save(user);
 

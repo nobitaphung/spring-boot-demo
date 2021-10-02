@@ -1,9 +1,8 @@
 package com.example.demo.utils;
 
-import com.example.demo.model.UserDetailsImpl;
+import com.example.demo.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import net.minidev.json.JSONValue;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +36,8 @@ public class JwtUtils {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        System.out.println(Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("user_name"));
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("user_name").toString();
     }
 
     public boolean validateJwtToken(String authToken) {

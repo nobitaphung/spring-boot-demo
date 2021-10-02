@@ -3,6 +3,7 @@ package com.example.demo.payload;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 public class SignupRequest {
     @NotBlank
@@ -17,6 +18,8 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 1, max = 40)
     private String password;
+
+    private String role;
 
     public String getUsername() {
         return username;
@@ -40,5 +43,12 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -4,8 +4,11 @@ spring:
     username: root
     password: ${HHD_PASSWORD}
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
   security:
     oauth2:

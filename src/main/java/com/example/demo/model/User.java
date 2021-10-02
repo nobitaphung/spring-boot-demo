@@ -4,9 +4,11 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(	name = "user",
+@Table(	name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
@@ -14,14 +16,20 @@ import javax.validation.constraints.Size;
 public class User {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;
     private String username;
     private String password;
-    private String role;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    Set<Role> roles = new HashSet<>();
+
     private boolean enabled;
 
     public  User(){};
@@ -64,12 +72,12 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public boolean isEnabled() {
